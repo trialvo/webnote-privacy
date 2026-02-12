@@ -1,33 +1,335 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>WebNote - Legal</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WebNote — Website Notes</title>
+  <meta name="description" content="WebNote helps you save website links with notes and organize them by folders for quick access." />
+
   <style>
-    :root{--bg:#0b0f1a;--card:rgba(255,255,255,.06);--text:#e9eefc;--muted:rgba(233,238,252,.78);--accent2:#27d3a2;--border:rgba(255,255,255,.12)}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.7;background:var(--bg);color:var(--text)}
-    .wrap{max-width:820px;margin:0 auto;padding:50px 16px}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px}
-    a{color:var(--accent2);text-decoration:none}
+    :root{
+      --bg:#0b0f1a;
+      --card:rgba(255,255,255,.06);
+      --text:#e9eefc;
+      --muted:rgba(233,238,252,.72);
+      --border:rgba(255,255,255,.12);
+      --p:#7c5cff;      /* purple */
+      --g:#27d3a2;      /* green */
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      line-height:1.65;
+      background:
+        radial-gradient(1000px 520px at 15% 0%, rgba(39,211,162,.14), transparent 55%),
+        radial-gradient(900px 520px at 90% 10%, rgba(124,92,255,.16), transparent 55%),
+        var(--bg);
+    }
+    a{color:inherit;text-decoration:none}
     a:hover{text-decoration:underline}
-    .links{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
-    .btn{display:inline-block;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.06);color:var(--text)}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 16px 60px}
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      position:sticky;top:0;z-index:10;padding:12px 0;
+      backdrop-filter: blur(10px);
+    }
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{
+      width:38px;height:38px;border-radius:14px;
+      background: linear-gradient(135deg, rgba(124,92,255,.9), rgba(39,211,162,.8));
+      box-shadow: var(--shadow);
+      display:grid;place-items:center;font-weight:800;
+    }
+    .brand h1{font-size:18px;margin:0;letter-spacing:.2px}
+    .pillbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .pill{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      padding:10px 12px;border-radius:999px;
+      font-size:13px;color:var(--muted);
+    }
+    .pill strong{color:var(--text);font-weight:650}
+    .hero{
+      display:grid;grid-template-columns: 1.2fr .8fr;gap:18px;
+      margin-top:10px;
+    }
+    @media (max-width: 900px){ .hero{grid-template-columns:1fr} .nav{position:static} }
+    .card{
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .heroTitle{
+      font-size:44px;line-height:1.1;margin:0 0 12px;letter-spacing:.2px;
+    }
+    @media (max-width: 520px){ .heroTitle{font-size:34px} }
+    .grad{
+      background: linear-gradient(90deg, var(--g), var(--p));
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+    }
+    .sub{color:var(--muted);font-size:16px;margin:0 0 18px}
+    .ctaRow{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:12px 14px;border-radius:14px;border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      font-weight:650;
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(124,92,255,.95), rgba(39,211,162,.85));
+      border-color: transparent;
+    }
+    .btn small{color:rgba(255,255,255,.9);font-weight:600}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+    @media (max-width: 520px){ .stats{grid-template-columns:1fr} }
+    .stat{padding:12px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.05)}
+    .stat .k{font-size:18px;font-weight:800}
+    .stat .t{color:var(--muted);font-size:13px}
+    .phoneMock{
+      height:100%;
+      display:grid;place-items:center;
+      background:
+        radial-gradient(220px 220px at 50% 25%, rgba(124,92,255,.25), transparent 60%),
+        radial-gradient(220px 220px at 50% 75%, rgba(39,211,162,.20), transparent 60%),
+        rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      min-height: 320px;
+      position:relative;
+      overflow:hidden;
+    }
+    .mockCard{
+      width:min(320px, 90%);
+      border-radius: 26px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(10,14,26,.65);
+      box-shadow: 0 20px 80px rgba(0,0,0,.45);
+      padding: 16px;
+    }
+    .mockTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .chip{
+      font-size:12px;color:rgba(255,255,255,.9);
+      padding:7px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+    }
+    .mockLines{display:grid;gap:10px;margin-top:10px}
+    .line{height:14px;border-radius:999px;background:rgba(255,255,255,.10)}
+    .line.sm{width:58%}
+    .line.md{width:78%}
+    .line.lg{width:92%}
+    .dotRow{display:flex;gap:8px;margin-top:12px}
+    .dot{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.14)}
+    .dot.g{background:rgba(39,211,162,.85)}
+    .dot.p{background:rgba(124,92,255,.9)}
+    .section{margin-top:18px}
+    .section h2{margin:0 0 10px;font-size:20px}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width: 900px){ .grid3{grid-template-columns:1fr} }
+    .feature h3{margin:0 0 6px;font-size:16px}
+    .feature p{margin:0;color:var(--muted);font-size:14px}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:12px;color:rgba(255,255,255,.9);
+      padding:7px 10px;border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--border);
+    }
+    .legalRow{display:flex;gap:12px;flex-wrap:wrap}
+    .muted{color:var(--muted)}
+    .faq{display:grid;gap:10px}
+    details{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+    summary{cursor:pointer;font-weight:700}
+    .footer{
+      margin-top:18px;
+      color:var(--muted);
+      text-align:center;
+      font-size:13px;
+    }
   </style>
 </head>
+
 <body>
   <div class="wrap">
-    <div class="card">
-      <h1>WebNote – Legal Pages</h1>
-      <p>Use the links below:</p>
-      <div class="links">
-        <a class="btn" href="./privacy-policy.html">Privacy Policy</a>
-        <a class="btn" href="./terms-and-conditions.html">Terms & Conditions</a>
+    <!-- NAV -->
+    <div class="nav">
+      <div class="brand">
+        <div class="logo">W</div>
+        <h1>WebNote</h1>
       </div>
-      <p style="opacity:.78;margin-top:16px;">
-        Contact: <a href="mailto:shafiulalamdev@gmail.com">shafiulalamdev@gmail.com</a>
+      <div class="pillbar">
+        <div class="pill"><strong>Save</strong> links + notes</div>
+        <div class="pill"><strong>Organize</strong> by folders</div>
+        <div class="pill"><strong>Quick</strong> search</div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="card">
+        <p class="badge">📌 Productivity • Website Notes</p>
+        <h2 class="heroTitle">
+          Keep your important <span class="grad">website links</span> with <span class="grad">notes</span>.
+        </h2>
+        <p class="sub">
+          WebNote helps you save websites, write quick notes, and organize everything with folders so you can find it instantly.
+        </p>
+
+        <div class="ctaRow">
+          <!-- TODO: Replace with your Play Store URL when live -->
+          <a class="btn primary" href="#" aria-label="Get WebNote on Google Play">
+            ▶ <span>Get on Google Play</span> <small>(soon)</small>
+          </a>
+          <a class="btn" href="./privacy-policy.html">Privacy Policy</a>
+          <a class="btn" href="./terms-and-conditions.html">Terms</a>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="k">Folders</div>
+            <div class="t">Group websites by category</div>
+          </div>
+          <div class="stat">
+            <div class="k">Notes</div>
+            <div class="t">Write quick details & reminders</div>
+          </div>
+          <div class="stat">
+            <div class="k">Search</div>
+            <div class="t">Find notes in seconds</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phoneMock">
+        <div class="mockCard">
+          <div class="mockTop">
+            <strong style="letter-spacing:.2px;">WebNote</strong>
+            <span class="chip">Synced</span>
+          </div>
+          <div class="mockLines">
+            <div class="line lg"></div>
+            <div class="line md"></div>
+            <div class="line sm"></div>
+          </div>
+          <div class="dotRow">
+            <div class="dot p"></div>
+            <div class="dot g"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <p class="muted" style="margin:12px 0 0;font-size:13px;">
+            Tip: Add your app screenshots later in this section.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="section card">
+      <h2>Features</h2>
+      <div class="grid3">
+        <div class="feature">
+          <h3>📁 Organize with folders</h3>
+          <p>Create folders like Study, Work, Tools, Shopping and keep everything clean.</p>
+        </div>
+        <div class="feature">
+          <h3>📝 Save links with notes</h3>
+          <p>Store the website URL and write notes so you remember why you saved it.</p>
+        </div>
+        <div class="feature">
+          <h3>🔎 Quick search</h3>
+          <p>Search notes & folders instantly to find any saved website within seconds.</p>
+        </div>
+        <div class="feature">
+          <h3>🎨 Color-coded</h3>
+          <p>Use colors to separate categories and make lists easier to scan.</p>
+        </div>
+        <div class="feature">
+          <h3>📌 Pin important folders</h3>
+          <p>Keep your most-used folders always at the top for quick access.</p>
+        </div>
+        <div class="feature">
+          <h3>🌙 Clean modern UI</h3>
+          <p>Minimal dark UI designed to be fast, lightweight, and easy to use.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREENSHOTS / ASSETS -->
+    <div class="section card">
+      <h2>Screenshots</h2>
+      <p class="muted" style="margin:0 0 12px;">
+        Add your app screenshots here (optional). You can upload images in this repo and link them.
       </p>
+      <div class="grid3">
+        <div class="feature">
+          <h3>Home</h3>
+          <p class="muted">Add: <code>/assets/home.png</code></p>
+        </div>
+        <div class="feature">
+          <h3>Notes list</h3>
+          <p class="muted">Add: <code>/assets/notes.png</code></p>
+        </div>
+        <div class="feature">
+          <h3>Create note</h3>
+          <p class="muted">Add: <code>/assets/new-note.png</code></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEGAL -->
+    <div class="section card">
+      <h2>Legal</h2>
+      <p class="muted" style="margin:0 0 12px;">
+        WebNote provides legal pages required for Google Play.
+      </p>
+      <div class="legalRow">
+        <a class="btn" href="./privacy-policy.html">Open Privacy Policy</a>
+        <a class="btn" href="./terms-and-conditions.html">Open Terms & Conditions</a>
+        <a class="btn" href="mailto:shafiulalamdev@gmail.com">Contact Support</a>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="section card">
+      <h2>FAQ</h2>
+      <div class="faq">
+        <details>
+          <summary>Does WebNote collect personal data?</summary>
+          <p class="muted">No. WebNote is designed to work without collecting personal information. Your notes are stored on your device.</p>
+        </details>
+        <details>
+          <summary>Can I share notes with other users?</summary>
+          <p class="muted">No. WebNote is a personal notes & link organizer.</p>
+        </details>
+        <details>
+          <summary>How do I contact support?</summary>
+          <p class="muted">Email us at <a href="mailto:shafiulalamdev@gmail.com">shafiulalamdev@gmail.com</a>.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="footer">
+      © <span id="y"></span> WebNote • Contact: shafiulalamdev@gmail.com
     </div>
   </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
